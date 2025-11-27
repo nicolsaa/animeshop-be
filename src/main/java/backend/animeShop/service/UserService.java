@@ -46,7 +46,6 @@ public class UserService {
             user.setEmail(userDetails.getEmail());
             user.setFirstName(userDetails.getFirstName());
             user.setLastName(userDetails.getLastName());
-            user.setPhone(userDetails.getPhone());
             user.setRole(userDetails.getRole());
             return userRepository.save(user);
         }
@@ -76,7 +75,6 @@ public class UserService {
         dto.setEmail(user.getEmail());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
-        dto.setPhone(user.getPhone());
         dto.setRole(user.getRole());
         dto.setCreatedAt(user.getCreatedAt());
         return dto;

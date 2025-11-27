@@ -10,7 +10,6 @@ public class UserDTO {
     private String email;
     private String firstName;
     private String lastName;
-    private String phone;
     private String role;
     private LocalDateTime createdAt;
 
@@ -57,14 +56,6 @@ public class UserDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getRole() {

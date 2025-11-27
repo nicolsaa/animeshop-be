@@ -32,7 +32,6 @@ public class User {
 
     private String firstName;
     private String lastName;
-    private String phone;
 
     @Column(nullable = false)
     private String role = "USER"; // "USER" o "ADMIN"
