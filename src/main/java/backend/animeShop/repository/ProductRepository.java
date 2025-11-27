@@ -1,11 +1,26 @@
 package backend.animeShop.repository;
 
+
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import backend.animeShop.model.Product;
 
+import java.util.List;
+
 @Repository
-public interface ProductRepository extends JpaRepository<Product,Long > {
-    
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    List<Product> findByCategoryId(Long categoryId);
+
+    List<Product> findByFeaturedTrue();
+
+    @Query("SELECT p FROM Product p WHERE " +
+            "LOWER(p.name) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(p.description) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<Product> searchProducts(@Param("query") String query);
+
+    List<Product> findByStockGreaterThan(Integer stock);
 }
