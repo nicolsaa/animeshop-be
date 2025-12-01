@@ -17,7 +17,7 @@ public class User {
 @NotNull(message = "El nombre de usuario es obligatorio")
 @Size(min = 1, message = "El nombre de usuario es obligatorio")
     @Column(unique = true, nullable = false)
-    private String username;
+    private String fullUsername;
 
 @NotNull(message = "El email es obligatorio")
 @Size(min = 1, message = "El email es obligatorio")
@@ -30,12 +30,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String firstName;
-    private String lastName;
 
     @Column(nullable = false)
     private String role = "USER"; // "USER" o "ADMIN"
-
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -44,16 +41,13 @@ public class User {
     }
 
     public User(String username, String email, String password, String firstName, String lastName) {
-        this.username = username;
+        this.fullUsername = username;
         this.email = email;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -62,12 +56,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFullUsername() {
+        return fullUsername;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFullUsername(String fullUsername) {
+        this.fullUsername = fullUsername;
     }
 
     public String getEmail() {
@@ -85,23 +79,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
 
     public String getRole() {
         return role;
@@ -127,15 +104,6 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    // Métodos del ciclo de vida
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
+    
 }

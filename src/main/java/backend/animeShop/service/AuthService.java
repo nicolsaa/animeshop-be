@@ -33,7 +33,7 @@ public class AuthService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("El email ya está registrado");
         }
-        if (userRepository.existsByUsername(user.getUsername())) {
+        if (userRepository.existsByFullUsername(user.getFullUsername())) {
             throw new RuntimeException("El nombre de usuario ya está en uso");
         }
         
@@ -47,7 +47,7 @@ public class AuthService {
         return new AuthResponse(
             mockToken,
             user.getId(),
-            user.getUsername(),
+            user.getFullUsername(),
             user.getEmail(),
             user.getRole()
         );
