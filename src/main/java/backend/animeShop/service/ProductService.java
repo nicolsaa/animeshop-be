@@ -1,13 +1,9 @@
 package backend.animeShop.service;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import backend.animeShop.dto.ProductDTO;
 import backend.animeShop.model.Product;
-import backend.animeShop.repository.CategoryRepository;
 import backend.animeShop.repository.ProductRepository;
 
 import java.util.List;
@@ -19,9 +15,6 @@ public class ProductService {
     
     @Autowired
     private ProductRepository productRepository;
-    
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     public List<ProductDTO> getAllProducts() {
         return productRepository.findAll().stream()
@@ -67,7 +60,7 @@ public class ProductService {
             product.setStock(productDetails.getStock());
             product.setImageUrl(productDetails.getImageUrl());
             product.setFeatured(productDetails.getFeatured());
-            product.setCategory(productDetails.getCategory());
+            //product.setCategory(productDetails.getCategory());
             
             Product updatedProduct = productRepository.save(product);
             return convertToDTO(updatedProduct);
@@ -93,7 +86,7 @@ public class ProductService {
         dto.setImageUrl(product.getImageUrl());
         dto.setRating(product.getRating());
         dto.setFeatured(product.getFeatured());
-        dto.setCategoryName(product.getCategory().getName());
+        //dto.setCategoryName(product.getCategory().getName());
         dto.setCreatedAt(product.getCreatedAt());
         return dto;
     }

@@ -1,14 +1,15 @@
 package backend.animeShop.controller;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import backend.animeShop.dto.ProductDTO;
 import backend.animeShop.model.Product;
+import backend.animeShop.model.Category;
+import backend.animeShop.repository.CategoryRepository;
 import backend.animeShop.service.ProductService;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @GetMapping
     public List<ProductDTO> getAllProducts() {
@@ -48,9 +52,25 @@ public class ProductController {
         return productService.searchProducts(query);
     }
 
-    @PostMapping
-    public ProductDTO createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+    @PostMapping("/product")
+    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO req) {
+        try {
+            Category category = categoryRepository.findByName(req.getCategoryName());
+
+            Product product = new Product(
+                    req.getName(),
+                    req.getDescription(),
+                    req.getPrice(),
+                    req.getStock(),
+                    category
+            );
+
+            ProductDTO newProduct = productService.createProduct(product);
+            return ResponseEntity.ok(newProduct);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")

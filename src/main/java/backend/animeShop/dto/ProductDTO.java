@@ -1,6 +1,5 @@
 package backend.animeShop.dto;
 
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -100,4 +99,5 @@ public class ProductDTO {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
 }
