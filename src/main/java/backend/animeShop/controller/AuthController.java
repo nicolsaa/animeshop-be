@@ -10,10 +10,10 @@ import backend.animeShop.dto.AuthResponse;
 import backend.animeShop.model.User;
 import backend.animeShop.service.AuthService;
 import backend.animeShop.dto.RegisterRequest;
-//import backend.animeShop.service.UserService;
+
 
 import java.util.Optional;
-import java.time.LocalDateTime;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,8 +22,6 @@ public class AuthController {
     @Autowired
     private AuthService authService;
     
-    // @Autowired
-    // private UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest authRequest) {

@@ -57,6 +57,21 @@ public class CategoryService {
         return false;
     }
 
+    // Nuevo: obtener o crear una categoría por nombre
+    public Category findOrCreateCategoryByName(String name) {
+        if (name == null) {
+            return null;
+        }
+        Category category = categoryRepository.findByName(name);
+        if (category != null) {
+            return category;
+        }
+        Category newCat = new Category();
+        newCat.setName(name);
+        newCat.setDescription(null);
+        return categoryRepository.save(newCat);
+    }
+
     // Convertir entidad a DTO
     private CategoryDTO convertToDTO(Category category) {
         CategoryDTO dto = new CategoryDTO();
