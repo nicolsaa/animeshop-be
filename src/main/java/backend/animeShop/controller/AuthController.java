@@ -9,9 +9,11 @@ import backend.animeShop.dto.AuthRequest;
 import backend.animeShop.dto.AuthResponse;
 import backend.animeShop.model.User;
 import backend.animeShop.service.AuthService;
+import backend.animeShop.dto.RegisterRequest;
 //import backend.animeShop.service.UserService;
 
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -37,14 +39,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody User user) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
         try {
+            User user = new User(registerRequest.getUsername(), registerRequest.getEmail(), registerRequest.getPassword(), null, null);
             User newUser = authService.register(user);
             AuthResponse authResponse = authService.generateAuthResponse(newUser);
             return ResponseEntity.ok(authResponse);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest()
-                    .body(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

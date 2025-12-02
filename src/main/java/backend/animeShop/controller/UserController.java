@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import backend.animeShop.dto.UserDTO;
+import backend.animeShop.dto.RoleRequest;
 import backend.animeShop.model.User;
 import backend.animeShop.service.UserService;
 import java.util.List;
@@ -37,6 +38,16 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         User updatedUser = userService.updateUser(id, userDetails);
         return updatedUser != null ? ResponseEntity.ok(updatedUser) : ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{id}/role")
+    public ResponseEntity<UserDTO> assignRole(@PathVariable Long id, @RequestBody RoleRequest roleRequest) {
+        String role = roleRequest != null ? roleRequest.getRole() : null;
+        if (role == null || !(role.equals("USER") || role.equals("ADMIN"))) {
+            return ResponseEntity.badRequest().build();
+        }
+        Optional<UserDTO> updated = userService.assignRole(id, role);
+        return updated.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
