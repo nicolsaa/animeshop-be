@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import backend.animeShop.dto.ProductDTO;
 import backend.animeShop.model.Product;
+import backend.animeShop.model.Category;
 import backend.animeShop.repository.ProductRepository;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,6 +15,9 @@ public class ProductService {
     
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryService categoryService;
 
     public List<ProductDTO> getAllProducts() {
         return productRepository.findAll().stream()
@@ -46,8 +49,47 @@ public class ProductService {
     }
 
     public ProductDTO createProduct(Product product) {
+        // Auto-assign category if none provided
+        if (product.getCategory() == null) {
+            Category assigned = determineCategoryForProduct(product);
+            product.setCategory(assigned);
+        }
         Product savedProduct = productRepository.save(product);
         return convertToDTO(savedProduct);
+    }
+
+    private Category determineCategoryForProduct(Product product) {
+        String name = product.getName() != null ? product.getName().toLowerCase() : "";
+        String description = product.getDescription() != null ? product.getDescription().toLowerCase() : "";
+
+        // Regla simple basada en palabras clave para las categorias permitidas
+        if (containsAny(name, description, "ropa", "shirt", "camiseta", "pantalon", "pants")) {
+            return categoryService.findOrCreateCategoryByName("ropa");
+        }
+        if (containsAny(name, description, "accesorio", "bolso", "gafas", "accesorios")) {
+            return categoryService.findOrCreateCategoryByName("accesorios");
+        }
+        if (containsAny(name, description, "figura", "figurine")) {
+            return categoryService.findOrCreateCategoryByName("figuras");
+        }
+        if (containsAny(name, description, "carta", "card", "cartas")) {
+            return categoryService.findOrCreateCategoryByName("cartas");
+        }
+        if (containsAny(name, description, "juego", "board", "game")) {
+            return categoryService.findOrCreateCategoryByName("juegos");
+        }
+
+        // Default fallback si no hay coincidencias
+        return categoryService.findOrCreateCategoryByName("accesorios");
+    }
+
+    private boolean containsAny(String a, String b, String... keywords) {
+        for (String kw : keywords) {
+            if ((a != null && a.contains(kw)) || (b != null && b.contains(kw))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ProductDTO updateProduct(Long id, Product productDetails) {
@@ -86,7 +128,7 @@ public class ProductService {
         dto.setImageUrl(product.getImageUrl());
         dto.setRating(product.getRating());
         dto.setFeatured(product.getFeatured());
-        //dto.setCategoryName(product.getCategory().getName());
+        dto.setCategoryName(product.getCategory() != null ? product.getCategory().getName() : "");
         dto.setCreatedAt(product.getCreatedAt());
         return dto;
     }

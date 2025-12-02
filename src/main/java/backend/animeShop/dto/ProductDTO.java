@@ -2,24 +2,37 @@ package backend.animeShop.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ProductDTO {
     private Long id;
+
+    @NotBlank
     private String name;
+
     private String description;
+
+    @NotNull
     private BigDecimal price;
+
+    @NotNull
     private Integer stock;
+
     private String imageUrl;
+
     private Double rating;
+
     private Boolean featured;
+
+    @NotBlank
     private String categoryName;
+
     private LocalDateTime createdAt;
 
-    // Constructores
     public ProductDTO() {
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }

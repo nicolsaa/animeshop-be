@@ -2,6 +2,7 @@ package backend.animeShop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import backend.animeShop.dto.ProductDTO;
 import backend.animeShop.model.Product;
@@ -23,6 +24,8 @@ public class ProductController {
     @Autowired
     private CategoryRepository categoryRepository;
 
+
+    
     @GetMapping //trae todos los productos
     public List<ProductDTO> getAllProducts() {
         return productService.getAllProducts();
@@ -50,8 +53,8 @@ public class ProductController {
         return productService.searchProducts(query);
     }
 
-    @PostMapping("/product")
-    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO req) {
+@PostMapping
+public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO req) {
         try {
             Category category = categoryRepository.findByName(req.getCategoryName());
 
@@ -64,7 +67,7 @@ public class ProductController {
             );
 
             ProductDTO newProduct = productService.createProduct(product);
-            return ResponseEntity.ok(newProduct);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
 
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
