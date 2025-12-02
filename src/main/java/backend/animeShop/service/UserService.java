@@ -8,6 +8,7 @@ import backend.animeShop.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 @Service
 public class UserService {
@@ -60,6 +61,22 @@ public class UserService {
 
     public boolean existsByUsername(String username) {
         return userRepository.existsByFullUsername(username);
+    }
+
+    public Optional<UserDTO> assignRole(Long id, String role) {
+        // Validate role
+        if (role == null || !(role.equals("USER") || role.equals("ADMIN"))) {
+            return Optional.empty();
+        }
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setRole(role);
+            user.setUpdatedAt(LocalDateTime.now());
+            User saved = userRepository.save(user);
+            return Optional.of(convertToDTO(saved));
+        }
+        return Optional.empty();
     }
 
     private UserDTO convertToDTO(User user) {
